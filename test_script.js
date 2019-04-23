@@ -33,7 +33,7 @@ const printResults = (result, name) => {
 }
 const searchName = (name) => {
     console.log("Searching...");
-    client.query("SELECT * FROM famous_people WHERE first_name LIKE $1::text OR last_name LIKE $1::text", [name], (err, result) => {
+    client.query("SELECT * FROM famous_people WHERE first_name LIKE $1::text OR last_name LIKE $1::text", [name] , (err, result) => {
       if (err) {
         return console.error("error running query", err);
       }
@@ -42,9 +42,14 @@ const searchName = (name) => {
     });
 }
 
-client.connect((err) => {
-  if (err) {
-    return console.error("Connection Error", err);
-  }
-  searchName(name);
-});
+if(name) {
+    client.connect((err) => {
+        if (err) {
+          return console.error("Connection Error", err);
+        }
+        searchName(name);
+    });
+} else {
+    console.log("Please specifiy a name to search for!");
+    console.log("Program will now end!");
+}
